@@ -10,6 +10,7 @@ connectDB();
 app.use(cookieParser());
 app.use(cors({
   origin: "http://localhost:5173",
+  "https://chat-app-frontend-dun-ten.vercel.app/"
   credentials: true,
 }));
 
