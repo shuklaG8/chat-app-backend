@@ -62,19 +62,20 @@ export const login = async (req, res) => {
     const token = await jwt.sign(tokenData, process.env.JWT_SECRET_KEY, {
       expiresIn: "1d",
     });
-    res
-      .status(200)
-      .cookie("token", token, {
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
-        httpOnly: true,
-        sameSite: "strict",
-      })
-      .json({
-        _id: user._id,
-        fullName: user.fullName,
-        username: user.username,
-        profilePhoto: user.profilePhoto,
-      });
+res
+  .status(200)
+  .cookie("token", token, {
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  })
+  .json({
+    _id: user._id,
+    fullName: user.fullName,
+    username: user.username,
+    profilePhoto: user.profilePhoto,
+  });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error logging in user" });
@@ -84,10 +85,15 @@ export const login = async (req, res) => {
 // Logout User
 export const logout = (req, res) => {
   try {
-    return res
-      .status(200)
-      .cookie("token", "", { maxAge: 0 })
-      .json({ message: "User logged out successfully" });
+return res
+  .status(200)
+  .cookie("token", "", {
+    maxAge: 0,
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  })
+  .json({ message: "User logged out successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error logging out user" });
   }
